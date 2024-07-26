@@ -5,7 +5,7 @@
         public string Name { get; private set; }
         public Address Address { get; private set; }
 
-        public User(Guid id, DateTimeOffset dateOfCreation, string name, Address address)
+        public User(Guid id, DateTime dateOfCreation, string name, Address address)
         {
             Id = id;
             CreatedDate = dateOfCreation;
@@ -13,7 +13,7 @@
             Address = address;
         }
 
-        public static User Create(Guid id, DateTimeOffset dateOfCreation, string name, Address address)
+        public static User Create(Guid id, DateTime dateOfCreation, string name, Address address)
         {
             if(string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {

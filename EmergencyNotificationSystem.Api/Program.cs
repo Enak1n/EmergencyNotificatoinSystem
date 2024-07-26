@@ -1,11 +1,19 @@
-var builder = WebApplication.CreateBuilder(args);
+using EmergencyNotificationSystem.Infrastructure.Extensions;
+using EmergencyNotificationSystem.Application.Extensions;
+using EmergencyNotificationSystem.Api.Middlewares;
+using EmergencyNotificationSystem.Infrastructure.Data;
 
+var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddInfrastructureService();
+builder.Services.AddApplicationService();
 
 var app = builder.Build();
 
@@ -19,6 +27,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<HttpExceptionMiddleware>();
 
 app.MapControllers();
 

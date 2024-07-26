@@ -13,4 +13,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmergencyNotificationSystem.Application\EmergencyNotificationSystem.Application.csproj" />
+    <ProjectReference Include="..\EmergencyNotificationSystem.Infrastructure\EmergencyNotificationSystem.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

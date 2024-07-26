@@ -12,6 +12,10 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Configurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Message).IsRequired();
+            builder.Property(x => x.Type).HasConversion(
+                                                v => v.ToString(),
+                                                v => (NotificationType)Enum.Parse(typeof(NotificationType), v));
+
 
             builder.Property(x => x.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnType("timestamp with time zone");
         }
