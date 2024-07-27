@@ -7,7 +7,12 @@ namespace EmergencyNotificationSystem.Domain.Models.CompayAggregate
 
         private readonly List<User> _users = new();
         public string Name { get; private set; }
-        public IReadOnlyCollection<User> Users => _users;
+        public IReadOnlyCollection<User>? Users => _users;
+
+        private Company()
+        {
+
+        }
 
         private Company(Guid id, DateTime dateOfCreation, string name)
         {

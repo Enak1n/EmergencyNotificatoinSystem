@@ -13,8 +13,9 @@ namespace EmergencyNotificationSystem.Application.Services
             _notificationRepository = notificationRepository;
         }
 
-        public async Task CreateNotification(Notification notification)
+        public async Task CreateNotification(Guid id, DateTime dateOfCreation, string message, NotificationType notificationType)
         {
+            var notification = Notification.Create(id, dateOfCreation, message, notificationType);
             await _notificationRepository.Create(notification);
             await _notificationRepository.SaveChanges();
         }

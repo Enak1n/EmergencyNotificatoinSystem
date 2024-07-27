@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmergencyNotificationSystem.Api.Controllers
 {
     [ApiController]
-    [Route("apy/v1/[controller]")]
+    [Route("api/v1/[controller]")]
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
@@ -36,8 +36,7 @@ namespace EmergencyNotificationSystem.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateNotificationDto notificationDto)
         {
-            var notification = Notification.Create(new Guid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
-            await _notificationService.CreateNotification(notification);
+            await _notificationService.CreateNotification(new Guid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
 
             return Created();
         }

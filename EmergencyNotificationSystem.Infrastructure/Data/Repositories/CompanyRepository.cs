@@ -37,7 +37,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 
         public async Task<List<Company>> GetAll()
         {
-            var companies = _context.Companies.ToListAsync();
+            var companies =  await _context.Companies.ToListAsync();
             return _mapper.Map<List<Company>>(companies);
         }
 
@@ -47,6 +47,8 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 
             if (companyEntity == null)
                 throw new EntityNotFoundException($"Company with {id} not found!");
+
+            return _mapper.Map<Company>(companyEntity);
         }
 
         public async Task<int> SaveChanges()

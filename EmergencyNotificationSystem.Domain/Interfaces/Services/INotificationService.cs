@@ -6,6 +6,6 @@ namespace EmergencyNotificationSystem.Domain.Interfaces.Services
     {
         Task<List<Notification>> GetAll();
         Task<Notification> GetById(Guid id);
-        Task CreateNotification(Notification notification);
+        Task CreateNotification(Guid id, DateTime dateOfCreation, string message, NotificationType notificationType);
     }
 }

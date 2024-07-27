@@ -14,6 +14,8 @@ namespace EmergencyNotificationSystem.Infrastructure.Extensions
         {
             services.AddAutoMapper(typeof(DataBaseMappings));
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddDbContext<Context>();
             return services;
         }
