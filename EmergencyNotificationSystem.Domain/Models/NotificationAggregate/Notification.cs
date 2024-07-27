@@ -20,7 +20,7 @@
 
         public static Notification Create(Guid id, DateTime dateOfCreation, string message, NotificationType notificationType)
         {
-            if(string.IsNullOrEmpty(message))
+            if(string.IsNullOrEmpty(message) || string.IsNullOrWhiteSpace(message))
             {
                 throw new ArgumentNullException($"Message can't be null!");
             }
