@@ -28,6 +28,8 @@ namespace EmergencyNotificationSystem.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
+            modelBuilder.ApplyConfiguration(new CompanyConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
 
         public ILoggerFactory CreateLoggerFactory() =>
