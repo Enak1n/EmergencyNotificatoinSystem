@@ -10,6 +10,8 @@ namespace EmergencyNotificationSystem.Infrastructure.Data
     public class Context : DbContext, IUnitOfWork
     {
         public DbSet<NotificationEntity> Notifications => Set<NotificationEntity>();
+        public DbSet<CompanyEntity> Companies => Set<CompanyEntity>();
+        public DbSet<UserEntity> Users => Set<UserEntity>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
