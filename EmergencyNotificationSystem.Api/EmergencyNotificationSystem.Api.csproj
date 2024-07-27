@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>96eded5d-c508-4e50-bf5b-d67d0dcb0c00</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EmergencyNotificationSystem.Application\EmergencyNotificationSystem.Application.csproj" />
     <ProjectReference Include="..\EmergencyNotificationSystem.Infrastructure\EmergencyNotificationSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\EmergencyNotificationSystem.Kafka\EmergencyNotificationSystem.Kafka.csproj" />
   </ItemGroup>
 
 </Project>

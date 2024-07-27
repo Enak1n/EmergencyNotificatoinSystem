@@ -1,6 +1,7 @@
 ﻿using EmergencyNotificationSystem.Domain.Interfaces.Services;
 using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
 using EmergencyNotificationSystem.Infrastructure.Dto;
+using MessageBroker.Kafka.Lib;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmergencyNotificationSystem.Api.Controllers
@@ -35,9 +36,11 @@ namespace EmergencyNotificationSystem.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateNotificationDto notificationDto)
         {
+            var messageBus = new MessageBus();
             var notification = Notification.Create(new Guid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
             await _notificationService.CreateNotification(notification);
 
+            await messageBus.SendMessage("hui", "Создали");
             return Created();
         }
     }
