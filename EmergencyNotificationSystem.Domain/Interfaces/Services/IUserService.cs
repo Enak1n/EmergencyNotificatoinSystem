@@ -6,8 +6,6 @@ namespace EmergencyNotificationSystem.Domain.Interfaces.Services
     {
         Task<List<User>> GetAll();
         Task<User> GetById(Guid id);
-        Task Register(User user);
-        Task Login(string email, string password);
         Task Delete(Guid id);
     }
 }

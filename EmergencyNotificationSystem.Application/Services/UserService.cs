@@ -13,9 +13,10 @@ namespace EmergencyNotificationSystem.Application.Services
             _userRepository = userRepository;
         }
 
-        public Task Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            throw new NotImplementedException();
+            await _userRepository.Delete(id);
+            await _userRepository.SaveChanges();
         }
 
         public async Task<List<User>> GetAll()
@@ -23,19 +24,11 @@ namespace EmergencyNotificationSystem.Application.Services
             return await _userRepository.GetAll();
         }
 
-        public Task<User> GetById(Guid id)
+        public async Task<User> GetById(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var user = await _userRepository.GetById(id);
 
-        public Task Login(string email, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Register(User user)
-        {
-            throw new NotImplementedException();
+            return user;
         }
     }
 }

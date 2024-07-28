@@ -1,5 +1,7 @@
-﻿using EmergencyNotificationSystem.Application.Services;
+﻿using EmergencyNotificationSystem.Application.Senders;
+using EmergencyNotificationSystem.Application.Services;
 using EmergencyNotificationSystem.Domain.Interfaces.Services;
+using EmergencyNotificationSystem.Domain.Interfaces.Services.Strategy;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EmergencyNotificationSystem.Application.Extensions
@@ -12,7 +14,10 @@ namespace EmergencyNotificationSystem.Application.Extensions
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
-            
+
+            services.AddScoped<INotificationSenderStrategy, NotificationSenderStrategy>();
+            services.AddScoped<ISendlerType, ConsoleNotificationSender>();
+
             return services;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using EmergencyNotificationSystem.Domain.Interfaces.Services;
+using EmergencyNotificationSystem.Domain.Interfaces.Services.Strategy;
 using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
 using EmergencyNotificationSystem.Infrastructure.Dto;
 using MessageBroker.Kafka.Lib;
@@ -11,16 +12,20 @@ namespace EmergencyNotificationSystem.Api.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
+        private readonly INotificationSenderStrategy _senderStrategy;
 
-        public NotificationController(INotificationService notificationService)
+        public NotificationController(INotificationService notificationService, INotificationSenderStrategy senderStrategy)
         {
             _notificationService = notificationService;
+            _senderStrategy = senderStrategy;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var notifications = await _notificationService.GetAll();
+
+            await _senderStrategy.Send(notifications.FirstOrDefault(), SendlerType.Console);
 
             return Ok(notifications);
         }

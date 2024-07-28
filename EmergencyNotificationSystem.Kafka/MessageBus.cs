@@ -6,10 +6,10 @@ using Confluent.SchemaRegistry.Serdes;
 
 namespace MessageBroker.Kafka.Lib
 {
-    public sealed class MessageBus : IDisposable
+    public sealed class MessageBus<T> : IDisposable
     {
-        private readonly IProducer<int, string> _producer;
-        private IConsumer<Guid, string> _consumer;
+        private readonly IProducer<int, T> _producer;
+        private IConsumer<int, T> _consumer;
 
         private readonly ProducerConfig _producerConfig;
         private readonly ConsumerConfig _consumerConfig;
@@ -31,13 +31,13 @@ namespace MessageBroker.Kafka.Lib
                 BootstrapServers = host
             };
 
-            _producer = new ProducerBuilder<int, string>(_producerConfig)
+            _producer = new ProducerBuilder<int, T>(_producerConfig)
                 .Build();
         }
 
-        public async Task SendMessage(string topic, string message)
+        public async Task SendMessage(string topic, T message)
         {
-            var newMessage = new Message<int, string>
+            var newMessage = new Message<int, T>
             {
                 Key = 1,
                 Value = message,
