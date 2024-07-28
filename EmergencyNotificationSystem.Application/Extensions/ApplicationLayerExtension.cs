@@ -11,6 +11,7 @@ namespace EmergencyNotificationSystem.Application.Extensions
         {
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<IUserService, UserService>();
             
             return services;
         }

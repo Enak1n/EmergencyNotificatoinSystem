@@ -8,6 +8,5 @@ namespace EmergencyNotificationSystem.Infrastructure.Entities
         public DateTime CreatedDate { get; set; }
         public string Name { get; set; }
         public Address Address { get; set; }
-        public List<CompanyEntity> Companies { get; set; }
     }
 }

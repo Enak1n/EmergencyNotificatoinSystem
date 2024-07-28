@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using EmergencyNotificationSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EmergencyNotificationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240728102313_ManytoMany_UserNotification")]
+    partial class ManytoMany_UserNotification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,25 +74,6 @@ namespace EmergencyNotificationSystem.Infrastructure.Migrations
                     b.ToTable("Notifications", (string)null);
                 });
 
-            modelBuilder.Entity("EmergencyNotificationSystem.Infrastructure.Entities.NotificationUserEntity", b =>
-                {
-                    b.Property<Guid>("NotificationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("NotificationStatus")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("NotificationId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserNotification", (string)null);
-                });
-
             modelBuilder.Entity("EmergencyNotificationSystem.Infrastructure.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -128,25 +112,6 @@ namespace EmergencyNotificationSystem.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
-                });
-
-            modelBuilder.Entity("EmergencyNotificationSystem.Infrastructure.Entities.NotificationUserEntity", b =>
-                {
-                    b.HasOne("EmergencyNotificationSystem.Infrastructure.Entities.NotificationEntity", "Notification")
-                        .WithMany()
-                        .HasForeignKey("NotificationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EmergencyNotificationSystem.Infrastructure.Entities.UserEntity", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Notification");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

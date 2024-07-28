@@ -36,7 +36,7 @@ namespace EmergencyNotificationSystem.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateNotificationDto notificationDto)
         {
-            await _notificationService.CreateNotification(new Guid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
+            await _notificationService.CreateNotification(Guid.NewGuid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
 
             return Created();
         }

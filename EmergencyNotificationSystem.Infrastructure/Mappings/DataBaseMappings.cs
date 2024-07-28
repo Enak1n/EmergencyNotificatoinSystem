@@ -10,9 +10,9 @@ namespace EmergencyNotificationSystem.Infrastructure.Mappings
     {
         public DataBaseMappings()
         {
-            CreateMap<NotificationEntity, Notification>();
-            CreateMap<UserEntity, User>();
-            CreateMap<CompanyEntity, Company>();
+            CreateMap<NotificationEntity, Notification>().ReverseMap();
+            CreateMap<UserEntity, User>().ReverseMap();
+            CreateMap<CompanyEntity, Company>().ReverseMap();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Configurations
                 b.Property(p => p.House).HasColumnName("House");
             });
 
-            builder.HasMany(e => e.Companies).WithMany(e => e.Users);
+
             builder.Property(x => x.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP").HasColumnType("timestamp with time zone");
         }
     }

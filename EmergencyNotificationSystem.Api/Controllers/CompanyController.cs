@@ -36,7 +36,7 @@ namespace EmergencyNotificationSystem.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Invalid model");
 
-            await _companyService.Create(new Guid(), DateTime.UtcNow, companyDto.name);
+            await _companyService.Create(Guid.NewGuid(), DateTime.UtcNow, companyDto.name);
 
             return Created();
         }

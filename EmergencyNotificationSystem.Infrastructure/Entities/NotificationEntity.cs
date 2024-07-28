@@ -12,5 +12,6 @@ namespace EmergencyNotificationSystem.Infrastructure.Entities
         public DateTime CreatedDate { get; set; }
         public string Message { get; set; }
         public NotificationType Type { get; set; }
+        public NotificationStatus Status { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data
         public DbSet<NotificationEntity> Notifications => Set<NotificationEntity>();
         public DbSet<CompanyEntity> Companies => Set<CompanyEntity>();
         public DbSet<UserEntity> Users => Set<UserEntity>();
+        public DbSet<NotificationUserEntity> NotificationUsers => Set<NotificationUserEntity>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -32,6 +33,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new NotificationConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationUserConfiguration());
         }
 
         public ILoggerFactory CreateLoggerFactory() =>

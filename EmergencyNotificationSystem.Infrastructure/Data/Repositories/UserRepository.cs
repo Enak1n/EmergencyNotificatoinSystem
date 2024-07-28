@@ -38,7 +38,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 
         public async Task<List<User>> GetAll()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users.AsNoTracking().ToListAsync();
 
             return _mapper.Map<List<User>>(users);
         }

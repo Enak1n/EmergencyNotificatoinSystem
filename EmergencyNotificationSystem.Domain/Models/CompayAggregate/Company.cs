@@ -4,10 +4,7 @@ namespace EmergencyNotificationSystem.Domain.Models.CompayAggregate
 {
     public class Company : BaseModel
     {
-
-        private readonly List<User> _users = new();
         public string Name { get; private set; }
-        public IReadOnlyCollection<User>? Users => _users;
 
         private Company()
         {
@@ -28,7 +25,5 @@ namespace EmergencyNotificationSystem.Domain.Models.CompayAggregate
 
             return new Company(id, dateOfCreation, name);
         }
-
-        public void AddUser(User user) => _users.Add(user);
     }
 }

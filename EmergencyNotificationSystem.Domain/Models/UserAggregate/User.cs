@@ -1,9 +1,17 @@
-﻿namespace EmergencyNotificationSystem.Domain.Models.UserAggregate
+﻿using EmergencyNotificationSystem.Domain.Models.CompayAggregate;
+using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
+
+namespace EmergencyNotificationSystem.Domain.Models.UserAggregate
 {
     public class User : BaseModel
     {
         public string Name { get; private set; }
         public Address Address { get; private set; }
+
+        private User()
+        {
+
+        }
 
         public User(Guid id, DateTime dateOfCreation, string name, Address address)
         {

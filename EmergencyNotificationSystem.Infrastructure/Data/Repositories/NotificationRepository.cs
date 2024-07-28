@@ -4,7 +4,7 @@ using EmergencyNotificationSystem.Domain.Interfaces.Repositories;
 using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
 using EmergencyNotificationSystem.Infrastructure.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+
 namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 {
     public class NotificationRepository : INotificationRepository
@@ -20,6 +20,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 
         public async Task Create(Notification notification)
         {
+            var notificationUsers = new List<NotificationUserEntity>();
             var notificationEntity = new NotificationEntity
             {
                 Id = notification.Id,
@@ -29,6 +30,21 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
             };
 
             await _context.Notifications.AddAsync(notificationEntity);
+
+            foreach (var user in notification.Users)
+            {
+                var notificationUser = new NotificationUserEntity
+                {
+                    NotificationId = notification.Id,
+                    UserId = user.Id,
+                    Notification = notificationEntity,
+                    NotificationStatus = NotificationStatus.NotSubmited
+                };
+
+                notificationUsers.Add(notificationUser);
+            }
+
+            await _context.NotificationUsers.AddRangeAsync(notificationUsers);
         }
 
         public async Task Delete(Guid id)

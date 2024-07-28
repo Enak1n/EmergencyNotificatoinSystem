@@ -36,20 +36,5 @@ namespace EmergencyNotificationSystem.UnitTests.Domain.CompanyAggregate
             // Assert
             act.Should().Throw<ArgumentNullException>();
         }
-
-        [Test]
-        public async Task AddUsers_CompanyWithUsers()
-        {
-            // Arrange
-            var company = Company.Create(new Guid(), DateTime.UtcNow, "test");
-            var address = Address.Create("testHouse", "testStreet", "testCity");
-            var user = User.Create(new Guid(), DateTime.UtcNow, "test", address);
-
-            // Act
-            company.AddUser(user);
-
-            // Assert
-            company.Users.Should().NotBeEmpty();
-        }
     }
 }
