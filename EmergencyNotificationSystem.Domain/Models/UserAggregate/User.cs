@@ -20,11 +20,6 @@
                 throw new ArgumentNullException("Name can't be null or empty");
             }
 
-            if (dateOfCreation < DateTimeOffset.UtcNow)
-            {
-                throw new ArgumentException("Incorrect date");
-            }
-
             return new User(id, dateOfCreation, name, address);
         }
     }
