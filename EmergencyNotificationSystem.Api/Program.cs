@@ -1,9 +1,15 @@
 using EmergencyNotificationSystem.Infrastructure.Extensions;
 using EmergencyNotificationSystem.Application.Extensions;
 using EmergencyNotificationSystem.Api.Middlewares;
-using EmergencyNotificationSystem.Infrastructure.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var options = new RequestLoggingOptions();
+Action<RequestLoggingOptions> configureOptions = null;
+configureOptions?.Invoke(options);
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 var configuration = builder.Configuration;
 // Add services to the container.
 
@@ -29,6 +35,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseMiddleware<HttpExceptionMiddleware>();
+app.UseMiddleware<SerilogMiddleware>(options);
 
 app.MapControllers();
 
