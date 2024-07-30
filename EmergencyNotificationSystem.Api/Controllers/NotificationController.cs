@@ -13,11 +13,14 @@ namespace EmergencyNotificationSystem.Api.Controllers
     {
         private readonly INotificationService _notificationService;
         private readonly INotificationSenderStrategy _senderStrategy;
+        private readonly MessageBus<string> _messageBus;
 
-        public NotificationController(INotificationService notificationService, INotificationSenderStrategy senderStrategy)
+        public NotificationController(INotificationService notificationService, INotificationSenderStrategy senderStrategy, MessageBus<string> messageBus)
         {
             _notificationService = notificationService;
             _senderStrategy = senderStrategy;
+            _messageBus = messageBus;
+
         }
 
         [HttpGet]
@@ -27,6 +30,7 @@ namespace EmergencyNotificationSystem.Api.Controllers
 
             await _senderStrategy.Send(notifications.FirstOrDefault(), SendlerType.Console);
 
+            await _messageBus.SendMessage("hui", "Отправлено");
             return Ok(notifications);
         }
 

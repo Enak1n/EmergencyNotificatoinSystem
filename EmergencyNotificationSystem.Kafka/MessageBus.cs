@@ -28,11 +28,14 @@ namespace MessageBroker.Kafka.Lib
             _consumerConfig = new ConsumerConfig
             {
                 GroupId = "custom-group",
-                BootstrapServers = host
+                BootstrapServers = "localhost:9092",
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             _producer = new ProducerBuilder<int, T>(_producerConfig)
                 .Build();
+
+            _consumer = new ConsumerBuilder<int, T>(_consumerConfig).Build();
         }
 
         public async Task SendMessage(string topic, T message)
@@ -47,7 +50,7 @@ namespace MessageBroker.Kafka.Lib
             await _producer.ProduceAsync(topic, newMessage);
         }
 
-        public void ConsumeMessage(string topic)
+        public async Task ConsumeMessage(string topic)
         {
             _consumer.Subscribe(topic);
             while (true)
@@ -56,6 +59,8 @@ namespace MessageBroker.Kafka.Lib
                 {
                     var messageFetchedfromTopic = _consumer.Consume();
                     Console.WriteLine(messageFetchedfromTopic.Message.Value);
+
+                    await Task.Delay(5000);
                 }
                 catch (Exception exception)
                 {
