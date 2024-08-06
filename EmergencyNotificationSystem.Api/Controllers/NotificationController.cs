@@ -12,13 +12,11 @@ namespace EmergencyNotificationSystem.Api.Controllers
     public class NotificationController : ControllerBase
     {
         private readonly INotificationService _notificationService;
-        private readonly INotificationSenderStrategy _senderStrategy;
-        private readonly MessageBus<string> _messageBus;
+        private readonly MessageBus _messageBus;
 
-        public NotificationController(INotificationService notificationService, INotificationSenderStrategy senderStrategy, MessageBus<string> messageBus)
+        public NotificationController(INotificationService notificationService, MessageBus messageBus)
         {
             _notificationService = notificationService;
-            _senderStrategy = senderStrategy;
             _messageBus = messageBus;
 
         }
@@ -27,8 +25,6 @@ namespace EmergencyNotificationSystem.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var notifications = await _notificationService.GetAll();
-
-            await _senderStrategy.Send(notifications.FirstOrDefault(), SendlerType.Console);
 
             await _messageBus.SendMessage("hui", "Отправлено");
             return Ok(notifications);
@@ -45,8 +41,9 @@ namespace EmergencyNotificationSystem.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateNotificationDto notificationDto)
         {
-            await _notificationService.CreateNotification(Guid.NewGuid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
+            var notification = await _notificationService.CreateNotification(Guid.NewGuid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
 
+            await _messageBus.SendMessage("hui", notification.Message);
             return Created();
         }
     }

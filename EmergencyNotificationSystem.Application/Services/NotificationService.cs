@@ -15,7 +15,7 @@ namespace EmergencyNotificationSystem.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task CreateNotification(Guid id, DateTime dateOfCreation, string message, NotificationType notificationType)
+        public async Task<Notification> CreateNotification(Guid id, DateTime dateOfCreation, string message, NotificationType notificationType)
         {
             var notification = Notification.Create(id, dateOfCreation, message, notificationType);
             var users = await _userRepository.GetAll();
@@ -24,6 +24,8 @@ namespace EmergencyNotificationSystem.Application.Services
 
             await _notificationRepository.Create(notification);
             await _notificationRepository.SaveChanges();
+
+            return notification;
         }
 
         public async Task<List<Notification>> GetAll()

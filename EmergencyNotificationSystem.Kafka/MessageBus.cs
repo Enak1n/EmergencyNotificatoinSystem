@@ -1,23 +1,23 @@
-﻿using System.Text;
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
+using EmergencyNotificationSystem.Domain.Interfaces.Services.Strategy;
+using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
 
 namespace MessageBroker.Kafka.Lib
 {
-    public sealed class MessageBus<T> : IDisposable
+    public sealed class MessageBus : IDisposable
     {
-        private readonly IProducer<int, T> _producer;
-        private IConsumer<int, T> _consumer;
+        private readonly IProducer<int, string> _producer;
+        private IConsumer<int, string> _consumer;
 
         private readonly ProducerConfig _producerConfig;
         private readonly ConsumerConfig _consumerConfig;
 
-        public MessageBus() : this("localhost:9092") { }
+        private readonly INotificationSenderStrategy _notificationSenderStrategy;
 
-        public MessageBus(string host)
+        public MessageBus(string host, INotificationSenderStrategy senderStrategy)
         {
+            _notificationSenderStrategy = senderStrategy;
 
             _producerConfig = new ProducerConfig
             {
@@ -32,15 +32,15 @@ namespace MessageBroker.Kafka.Lib
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            _producer = new ProducerBuilder<int, T>(_producerConfig)
+            _producer = new ProducerBuilder<int, string>(_producerConfig)
                 .Build();
 
-            _consumer = new ConsumerBuilder<int, T>(_consumerConfig).Build();
+            _consumer = new ConsumerBuilder<int, string>(_consumerConfig).Build();
         }
 
-        public async Task SendMessage(string topic, T message)
+        public async Task SendMessage(string topic, string message)
         {
-            var newMessage = new Message<int, T>
+            var newMessage = new Message<int, string>
             {
                 Key = 1,
                 Value = message,
@@ -50,23 +50,21 @@ namespace MessageBroker.Kafka.Lib
             await _producer.ProduceAsync(topic, newMessage);
         }
 
-        public async Task ConsumeMessage(string topic)
+        public async Task ConsumeMessage(string topic, SendlerType sendlerType)
         {
             _consumer.Subscribe(topic);
-            while (true)
-            {
-                try
-                {
-                    var messageFetchedfromTopic = _consumer.Consume();
-                    Console.WriteLine(messageFetchedfromTopic.Message.Value);
+            await Task.Yield();
+            var messageFetchedFromTopic = _consumer.Consume(TimeSpan.FromSeconds(1));
 
-                    await Task.Delay(5000);
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine($"Kafka Consumer on Topic {topic} failed to consume message {exception.Message}");
-                }
-            }
+            if (messageFetchedFromTopic == null)
+                return;
+
+            var notification = Notification.Create(Guid.NewGuid(), DateTime.UtcNow, messageFetchedFromTopic.Message.Value.ToString(), NotificationType.Alert);
+            await _notificationSenderStrategy.Send(notification, sendlerType);
+
+            Console.WriteLine($"Отправлено с брокера {messageFetchedFromTopic.Message.Value}");
+
+            _consumer.Commit();
         }
 
         public static void Create(bool create)

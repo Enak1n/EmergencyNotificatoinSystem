@@ -15,8 +15,8 @@ namespace EmergencyNotificationSystem.Application.Extensions
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddScoped<INotificationSenderStrategy, NotificationSenderStrategy>();
-            services.AddScoped<ISendlerType, ConsoleNotificationSender>();
+            services.AddSingleton<INotificationSenderStrategy, NotificationSenderStrategy>();
+            services.AddSingleton<ISendlerType, ConsoleNotificationSender>();
 
             return services;
         }

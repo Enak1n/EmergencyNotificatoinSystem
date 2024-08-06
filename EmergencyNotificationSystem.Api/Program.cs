@@ -4,6 +4,7 @@ using EmergencyNotificationSystem.Api.Middlewares;
 using Serilog;
 using MessageBroker.Kafka.Lib;
 using EmergencyNotificationSystem.Api.Services;
+using EmergencyNotificationSystem.Domain.Interfaces.Services.Strategy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +21,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton(typeof(MessageBus<>));
-
 builder.Services.AddHostedService<ConsumerService>();
 builder.Services.AddInfrastructureService();
 builder.Services.AddApplicationService();
+
+var kafkaHost = "localhost:9092"; // or read it from configuration
+builder.Services.AddSingleton(kafkaHost);
+
+builder.Services.AddSingleton<MessageBus>(serviceProvider =>
+{
+    var host = serviceProvider.GetRequiredService<string>();
+    var senderStrategy = serviceProvider.GetRequiredService<INotificationSenderStrategy>();
+    return new MessageBus(host, senderStrategy);
+});
 
 var app = builder.Build();
 

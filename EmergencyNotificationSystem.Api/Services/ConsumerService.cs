@@ -1,27 +1,24 @@
-﻿
-using MessageBroker.Kafka.Lib;
+﻿using MessageBroker.Kafka.Lib;
 
 namespace EmergencyNotificationSystem.Api.Services
 {
     public class ConsumerService : BackgroundService
     {
-        private readonly MessageBus<string> _messageBus;
+        private readonly MessageBus _messageBus;
 
-        public ConsumerService(MessageBus<string> messageBus)
+        public ConsumerService(MessageBus messageBus)
         {
             _messageBus = messageBus;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            while (!stoppingToken.IsCancellationRequested)
             {
-                await _messageBus.ConsumeMessage("hui");
+                await _messageBus.ConsumeMessage("hui", SendlerType.Console);
+                Task.Delay(1000);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Can't consume message!");
-            }
+
         }
     }
 }
