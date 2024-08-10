@@ -3,7 +3,13 @@ services:
     image: ${DOCKER_REGISTRY-}emergencynotificationsystemapi
     build:
       context: .
-      dockerfile: EmergencyNotificationSystem.Api/Dockerfile
+      dockerfile: APIService/EmergencyNotificationSystem.Api/Dockerfile
+
+  message_service:
+    image: ${DOCKER_REGISTRY-}messageservice
+    build: 
+      context: .
+      dockerfile: MessageService/MessageService.API/Dockerfile
 
   kafdrop:
     image: obsidiandynamics/kafdrop

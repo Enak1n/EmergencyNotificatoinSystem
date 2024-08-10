@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EmergencyNotificationSystem.Domain\EmergencyNotificationSystem.Domain.csproj" />
+    <ProjectReference Include="..\APIService\EmergencyNotificationSystem.Domain\EmergencyNotificationSystem.Domain.csproj" />
   </ItemGroup>
 
 </Project>

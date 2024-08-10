@@ -1,7 +1,5 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
-using EmergencyNotificationSystem.Domain.Interfaces.Services.Strategy;
-using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
 
 namespace MessageBroker.Kafka.Lib
 {
@@ -13,12 +11,8 @@ namespace MessageBroker.Kafka.Lib
         private readonly ProducerConfig _producerConfig;
         private readonly ConsumerConfig _consumerConfig;
 
-        private readonly INotificationSenderStrategy _notificationSenderStrategy;
-
-        public MessageBus(string host, INotificationSenderStrategy senderStrategy)
+        public MessageBus(string host)
         {
-            _notificationSenderStrategy = senderStrategy;
-
             _producerConfig = new ProducerConfig
             {
                 BootstrapServers = "localhost:9092",
@@ -50,21 +44,18 @@ namespace MessageBroker.Kafka.Lib
             await _producer.ProduceAsync(topic, newMessage);
         }
 
-        public async Task ConsumeMessage(string topic, SendlerType sendlerType)
+        public async Task<string?> ConsumeMessage(string topic)
         {
             _consumer.Subscribe(topic);
             await Task.Yield();
             var messageFetchedFromTopic = _consumer.Consume(TimeSpan.FromSeconds(1));
 
             if (messageFetchedFromTopic == null)
-                return;
-
-            var notification = Notification.Create(Guid.NewGuid(), DateTime.UtcNow, messageFetchedFromTopic.Message.Value.ToString(), NotificationType.Alert);
-            await _notificationSenderStrategy.Send(notification, sendlerType);
-
-            Console.WriteLine($"Отправлено с брокера {messageFetchedFromTopic.Message.Value}");
+                return null;
 
             _consumer.Commit();
+
+            return messageFetchedFromTopic.Message.Value;
         }
 
         public static void Create(bool create)
