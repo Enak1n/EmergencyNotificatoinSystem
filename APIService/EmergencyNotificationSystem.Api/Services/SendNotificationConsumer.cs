@@ -11,13 +11,14 @@ namespace EmergencyNotificationSystem.Api.Services
     {
         private readonly MessageBus _messageBus;
         private readonly KafkaSettings _kafkaSettings;
-        private readonly NotificationController _notificationController;
 
-        public SendNotificationConsumer(MessageBus messageBus, IOptions<KafkaSettings> kafkaSettings, NotificationController notificationController)
+        public IServiceProvider Services { get; }
+
+        public SendNotificationConsumer(MessageBus messageBus, IOptions<KafkaSettings> kafkaSettings, IServiceProvider services)
         {
             _messageBus = messageBus;
             _kafkaSettings = kafkaSettings.Value;
-            _notificationController = notificationController;
+            Services = services;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -34,7 +35,14 @@ namespace EmergencyNotificationSystem.Api.Services
 
                 var notification = JsonSerializer.Deserialize<NotificationMessage>(message);
 
-                await _notificationController.ChangeStatus(notification.Id);
+                using (var scope = Services.CreateScope())
+                {
+                    var scopedProcessingService =
+                            scope.ServiceProvider
+                                .GetRequiredService<NotificationController>();
+                    await scopedProcessingService.ChangeStatus(notification.Id);
+                }
+
                 await Task.Delay(5000);
             }
         }

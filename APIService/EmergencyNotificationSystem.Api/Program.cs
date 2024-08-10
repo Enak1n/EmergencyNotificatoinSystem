@@ -25,7 +25,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructureService();
 builder.Services.AddApplicationService();
 builder.Services.Configure<KafkaSettings>(configuration.GetSection(nameof(KafkaSettings)));
-builder.Services.AddScoped<NotificationController>();
+builder.Services.AddTransient<NotificationController>();
 builder.Services.AddHostedService<SendNotificationConsumer>();
 
 var kafkaHost = configuration.GetSection(nameof(KafkaSettings)).Get<KafkaSettings>();

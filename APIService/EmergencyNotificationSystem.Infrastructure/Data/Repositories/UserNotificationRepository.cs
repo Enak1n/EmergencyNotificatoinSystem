@@ -3,6 +3,7 @@ using EmergencyNotificationSystem.Domain.Exceptions;
 using EmergencyNotificationSystem.Domain.Interfaces.Repositories;
 using EmergencyNotificationSystem.Domain.Models.NotificationAggregate;
 using EmergencyNotificationSystem.Infrastructure.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 {
@@ -19,7 +20,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Data.Repositories
 
         public async Task<Notification> ChangeStatus(Guid id)
         {
-            var notification = await _context.Notifications.FindAsync(id);
+            var notification = await _context.Notifications.Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if(notification == null)
             {
