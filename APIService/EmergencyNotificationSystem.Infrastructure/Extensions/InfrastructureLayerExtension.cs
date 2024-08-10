@@ -17,6 +17,7 @@ namespace EmergencyNotificationSystem.Infrastructure.Extensions
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddDbContext<Context>();
+            services.AddScoped<INotificationUsersRepository, UserNotificationRepository>();
             return services;
         }
 

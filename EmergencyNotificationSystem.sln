@@ -21,9 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIService", "APIService", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageService", "MessageService", "{A7C5466D-469C-4A6D-82BF-34AD37E559B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageService.API", "MessageService\MessageService.API\MessageService.API.csproj", "{41605335-9877-4229-8229-2715CDDA3DF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageService.API", "MessageService\MessageService.API\MessageService.API.csproj", "{41605335-9877-4229-8229-2715CDDA3DF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageService.Application", "MessageService\MessageService.Application\MessageService.Application.csproj", "{F16EDAFC-EFA1-4AE9-9BD7-A6DE0DC0FA79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageService.Application", "MessageService\MessageService.Application\MessageService.Application.csproj", "{F16EDAFC-EFA1-4AE9-9BD7-A6DE0DC0FA79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,11 +8,19 @@ namespace EmergencyNotificationSystem.Application.Services
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly IUserService _userRepository;
+        private readonly INotificationUsersRepository _notificationUsersRepository;
 
-        public NotificationService(INotificationRepository notificationRepository, IUserService userRepository)
+        public NotificationService(INotificationRepository notificationRepository, IUserService userRepository,
+            INotificationUsersRepository notificationUsersRepository)
         {
             _notificationRepository = notificationRepository;
             _userRepository = userRepository;
+            _notificationUsersRepository = notificationUsersRepository;
+        }
+
+        public async Task ChangeStatus(Guid id)
+        {
+            await _notificationUsersRepository.ChangeStatus(id);
         }
 
         public async Task<Notification> CreateNotification(Guid id, DateTime dateOfCreation, string message, NotificationType notificationType)

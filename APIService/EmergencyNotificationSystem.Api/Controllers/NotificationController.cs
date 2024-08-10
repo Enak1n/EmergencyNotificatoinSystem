@@ -1,7 +1,10 @@
-﻿using EmergencyNotificationSystem.Domain.Interfaces.Services;
+﻿using EmergencyNotificationSystem.Api.Options;
+using EmergencyNotificationSystem.Domain.Interfaces.Services;
 using EmergencyNotificationSystem.Infrastructure.Dto;
 using MessageBroker.Kafka.Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace EmergencyNotificationSystem.Api.Controllers
 {
@@ -11,12 +14,13 @@ namespace EmergencyNotificationSystem.Api.Controllers
     {
         private readonly INotificationService _notificationService;
         private readonly MessageBus _messageBus;
+        private readonly KafkaSettings _kafkaSettings;
 
-        public NotificationController(INotificationService notificationService, MessageBus messageBus)
+        public NotificationController(INotificationService notificationService, MessageBus messageBus, IOptionsSnapshot<KafkaSettings> kafkaSettings)
         {
             _notificationService = notificationService;
             _messageBus = messageBus;
-
+            _kafkaSettings = kafkaSettings.Value;
         }
 
         [HttpGet]
@@ -24,7 +28,6 @@ namespace EmergencyNotificationSystem.Api.Controllers
         {
             var notifications = await _notificationService.GetAll();
 
-            await _messageBus.SendMessage("hui", "Отправлено");
             return Ok(notifications);
         }
 
@@ -41,8 +44,19 @@ namespace EmergencyNotificationSystem.Api.Controllers
         {
             var notification = await _notificationService.CreateNotification(Guid.NewGuid(), DateTime.UtcNow, notificationDto.Message, notificationDto.NotificationType);
 
-            await _messageBus.SendMessage("hui", notification.Message);
+            var notificationMessage = new NotificationMessage(notification.Id, notification.Message);
+
+            var notificationJson = JsonSerializer.Serialize(notificationMessage);
+
+            await _messageBus.SendMessage(_kafkaSettings.NotificationTopic, notificationJson);
             return Created();
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> ChangeStatus(Guid id)
+        {
+            await _notificationService.ChangeStatus(id);
+            return Ok();
         }
     }
 }

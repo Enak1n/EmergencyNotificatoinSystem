@@ -15,14 +15,14 @@ namespace MessageBroker.Kafka.Lib
         {
             _producerConfig = new ProducerConfig
             {
-                BootstrapServers = "localhost:9092",
+                BootstrapServers = host,
                 Acks = Acks.All
             };
 
             _consumerConfig = new ConsumerConfig
             {
                 GroupId = "custom-group",
-                BootstrapServers = "localhost:9092",
+                BootstrapServers = host,
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
